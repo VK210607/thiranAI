@@ -49,6 +49,11 @@ interface Milestone {
     projectUrl?: string;
     notes?: string;
     completedAt?: string;
+    aiVerified?: boolean;
+    verificationScore?: number;
+    feedback?: string;
+    strengths?: string[];
+    badge?: string;
   } | null;
   userRating?: number | null;
   userFeedback?: string | null;
