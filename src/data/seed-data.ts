@@ -86,6 +86,50 @@ export const SEED_HACKATHONS = [
       targetLevel: "Intermediate"
     },
     isCurated: true
+  },
+  {
+    id: "hack_5",
+    title: "Global Generative AI & Autonomous Agents Hackathon",
+    organizer: "LangChain, LlamaIndex & Google AI",
+    domainTags: ["AI Engineering & LLMOps", "AI & Machine Learning"],
+    description: "Build multi-agent workflows, tool-calling copilots, and multi-modal RAG systems with Gemini 2.5 Flash and vector databases.",
+    startDate: "2026-10-18T00:00:00Z",
+    endDate: "2026-10-21T23:59:59Z",
+    deadline: "2026-10-15T23:59:59Z",
+    location: "Global Virtual",
+    isOnline: true,
+    registrationUrl: "https://devpost.com/hackathons",
+    prizePool: "$35,000 USD + Seed Venture Grants",
+    eligibilityCriteria: {
+      studentOnly: false,
+      minTeamSize: 1,
+      maxTeamSize: 4,
+      requiredSkills: ["Python / TypeScript", "LangChain / LlamaIndex", "Vector Search"],
+      targetLevel: "All Levels"
+    },
+    isCurated: true
+  },
+  {
+    id: "hack_6",
+    title: "Cloud Native & Kubernetes Multi-Region Sprint",
+    organizer: "Cloud Native Computing Foundation (CNCF)",
+    domainTags: ["Cloud Computing & DevOps", "Data Engineering & Big Data"],
+    description: "Architect high-availability cloud setups, automated GitOps CI/CD pipelines, and eBPF network observability systems.",
+    startDate: "2026-11-05T00:00:00Z",
+    endDate: "2026-11-08T23:59:59Z",
+    deadline: "2026-11-01T23:59:59Z",
+    location: "Hybrid (Online / San Francisco)",
+    isOnline: true,
+    registrationUrl: "https://cncf.io/events",
+    prizePool: "$20,000 + CNCF Certification Vouchers",
+    eligibilityCriteria: {
+      studentOnly: true,
+      minTeamSize: 2,
+      maxTeamSize: 4,
+      requiredSkills: ["Kubernetes", "Docker", "Terraform / Helm", "Linux"],
+      targetLevel: "Intermediate"
+    },
+    isCurated: true
   }
 ];
 
@@ -162,6 +206,42 @@ export const SEED_INTERNSHIPS = [
       allowedDegrees: ["B.S./M.S. in Computer Science or self-taught with equivalent project proof"]
     },
     requiredSkills: ["React", "TypeScript", "CSS/Tailwind", "REST/GraphQL APIs", "Unit Testing (Jest/Playwright)"],
+    isCurated: true
+  },
+  {
+    id: "intern_5",
+    title: "Generative AI Systems & LLMOps Intern",
+    company: "Scale AI",
+    domain: "AI Engineering & LLMOps",
+    stipend: "$55 / hr + Equity Grants",
+    location: "San Francisco, CA / Remote",
+    remote: true,
+    applicationUrl: "https://scale.com/careers",
+    deadline: "2026-11-15T23:59:59Z",
+    description: "Build evaluation harnesses for enterprise LLMs, optimize vector retrieval latency, and fine-tune models for code reasoning.",
+    eligibilityCriteria: {
+      graduatingYears: ["2027", "2028"],
+      allowedDegrees: ["B.S./M.S. in Computer Science, Data Science, or related field"]
+    },
+    requiredSkills: ["Python", "Vector Databases", "Prompt Engineering", "Evaluation Frameworks (Ragas/TruLens)", "FastAPI"],
+    isCurated: true
+  },
+  {
+    id: "intern_6",
+    title: "Cloud Infrastructure & SRE Intern",
+    company: "Datadog",
+    domain: "Cloud Computing & DevOps",
+    stipend: "$46 / hr + Housing Support",
+    location: "New York, NY / Boston, MA",
+    remote: false,
+    applicationUrl: "https://www.datadoghq.com/careers",
+    deadline: "2026-11-10T23:59:59Z",
+    description: "Develop automated canary deployments, maintain Kubernetes cluster observability, and build chaos engineering experiments.",
+    eligibilityCriteria: {
+      graduatingYears: ["2027", "2028"],
+      allowedDegrees: ["B.S./B.Tech in CS/EE or equivalent"]
+    },
+    requiredSkills: ["Linux", "Docker", "Kubernetes Basics", "Python / Go", "CI/CD Concepts"],
     isCurated: true
   }
 ];

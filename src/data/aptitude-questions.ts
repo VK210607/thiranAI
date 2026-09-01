@@ -8,7 +8,7 @@ export interface AptitudeQuestion {
     id: string;
     label: string;
     description: string;
-    alignedDomains: string[]; // e.g. ["Full-Stack Web Development", "AI & Machine Learning"]
+    alignedDomains: string[]; // e.g. ["Full-Stack Web Development", "AI Engineering & LLMOps"]
     trait: string;
   }[];
 }
@@ -17,108 +17,108 @@ export const APTITUDE_QUESTIONS: AptitudeQuestion[] = [
   {
     id: "q1_weekend_project",
     category: "PROJECT_PREFERENCE",
-    title: "The Weekend Hack Challenge",
+    title: "The 48-Hour Hackathon Challenge",
     prompt: "You are given 48 uninterrupted hours and complete creative freedom. Which project would you be most excited to build?",
     options: [
       {
         id: "opt_web",
-        label: "Interactive Web Application",
-        description: "A collaborative real-time study platform with buttery-smooth animations, clean dashboards, and instant sharing.",
-        alignedDomains: ["Full-Stack Web Development", "UI/UX & Frontend Engineering"],
-        trait: "Visual Creation & Product Building"
+        label: "Interactive Real-Time Web Platform",
+        description: "A collaborative workspace with smooth animations, instant WebSocket sync, and responsive dashboards.",
+        alignedDomains: ["Full-Stack Web Development", "UI/UX & Product Design"],
+        trait: "Visual Creation & Product Flow"
       },
       {
-        id: "opt_ai",
-        label: "Intelligent Neural Predictor",
-        description: "An AI model that listens to patient cough audio files or financial trends and detects underlying patterns with 95% accuracy.",
-        alignedDomains: ["AI & Machine Learning", "Data Science & Analytics"],
-        trait: "Mathematical Modeling & Pattern Recognition"
-      },
-      {
-        id: "opt_cyber",
-        label: "Penetration Testing & Defense Lab",
-        description: "Setting up a secure honeypot, reverse-engineering a vulnerable binary, and auditing an API for exploit vectors.",
-        alignedDomains: ["Cybersecurity & Ethical Hacking", "Cloud & DevOps Engineering"],
-        trait: "Adversarial Thinking & Systems Resilience"
+        id: "opt_ai_eng",
+        label: "Autonomous AI Research & Coding Agent",
+        description: "A multi-agent system combining LLMs, vector database retrieval (RAG), and tools to autonomously research and write code.",
+        alignedDomains: ["AI Engineering & LLMOps", "AI & Machine Learning"],
+        trait: "Generative Intelligence & Agentic Logic"
       },
       {
         id: "opt_cloud",
-        label: "Distributed Microservices Architecture",
-        description: "Automating Kubernetes clusters, zero-downtime CI/CD pipelines, and multi-region database replication.",
-        alignedDomains: ["Cloud & DevOps Engineering", "Backend & Distributed Systems"],
-        trait: "Infrastructure & High Availability"
+        label: "Auto-Healing Multi-Cloud Kubernetes Mesh",
+        description: "Automating cloud infrastructure with Terraform, zero-downtime canary deployments, and Prometheus observability.",
+        alignedDomains: ["Cloud Computing & DevOps", "Data Engineering & Big Data"],
+        trait: "Infrastructure Orchestration & Scale"
+      },
+      {
+        id: "opt_cyber",
+        label: "Penetration Testing & Red-Team Defense Lab",
+        description: "Setting up a secure honeypot, reverse-engineering vulnerable binaries, and auditing APIs for exploit vectors.",
+        alignedDomains: ["Cybersecurity & Ethical Hacking"],
+        trait: "Adversarial Security & Threat Modeling"
       }
     ]
   },
   {
     id: "q2_scenario_breakdown",
     category: "SCENARIO",
-    title: "The Crisis Breakdown",
-    prompt: "An online bookstore crashes right when 10,000 students try to buy semester textbooks at once. Where does your curiosity naturally pull you first?",
+    title: "The High-Traffic Outage Scenario",
+    prompt: "A campus super-app crashes right when 20,000 students try to register for classes simultaneously. Where does your curiosity naturally pull you first?",
     options: [
       {
         id: "opt_frontend_fix",
-        label: "User Interface & Experience",
-        description: "Checking if client-side rendering choked, streamlining checkout flows, and adding graceful offline caching.",
-        alignedDomains: ["Full-Stack Web Development", "UI/UX & Frontend Engineering"],
-        trait: "User Experience Empathy"
+        label: "User Interface & Client State Resilience",
+        description: "Checking if client-side rendering choked, streamlining registration queues, and adding graceful offline caching.",
+        alignedDomains: ["Full-Stack Web Development", "Mobile & Cross-Platform Development"],
+        trait: "User Experience & Flow Empathy"
       },
       {
-        id: "opt_data_analysis",
-        label: "Data Ingestion & Traffic Patterns",
-        description: "Querying anomaly detection logs, analyzing shopping basket behavior, and clustering traffic spikes.",
-        alignedDomains: ["Data Science & Analytics", "AI & Machine Learning"],
-        trait: "Analytical Reasoning"
+        id: "opt_cloud_scaling",
+        label: "Cloud Autoscaling & Serverless Infrastructure",
+        description: "Configuring elastic load balancers, database connection pools, Kubernetes HPA, and microservice limits.",
+        alignedDomains: ["Cloud Computing & DevOps"],
+        trait: "Systems Optimization & High Availability"
       },
       {
-        id: "opt_security_audit",
-        label: "Security & DDoS Assessment",
-        description: "Investigating whether this is a distributed bot attack, rate-limit evasion, or authentication bottleneck.",
-        alignedDomains: ["Cybersecurity & Ethical Hacking"],
-        trait: "Security First Mindset"
+        id: "opt_data_pipeline",
+        label: "Data Ingestion & High-Throughput Streaming",
+        description: "Analyzing Kafka partition bottlenecks, deduplicating transaction events, and optimizing database write locks.",
+        alignedDomains: ["Data Engineering & Big Data"],
+        trait: "Data Throughput & Concurrency"
       },
       {
-        id: "opt_infra_scaling",
-        label: "Server Autoscaling & Load Balancing",
-        description: "Configuring load balancers, database connection pools, and container horizontal scaling.",
-        alignedDomains: ["Cloud & DevOps Engineering", "Backend & Distributed Systems"],
-        trait: "Systems Optimization"
+        id: "opt_ai_triage",
+        label: "AI-Powered Anomaly Detection & Self-Healing",
+        description: "Feeding system telemetry to an AI model to detect root-cause patterns and auto-adjust server configurations.",
+        alignedDomains: ["AI Engineering & LLMOps", "AI & Machine Learning"],
+        trait: "Algorithmic Pattern Analysis"
       }
     ]
   },
   {
     id: "q3_logic_puzzle",
     category: "MICRO_TASK",
-    title: "5-Minute Logic Puzzle",
-    prompt: "Consider this scenario: You need to transfer 1,000,000 student transcripts securely between two universities over a slow network. Which approach appeals most to you?",
+    title: "5-Minute Architecture Logic Puzzle",
+    prompt: "You need to securely transfer and process 10,000,000 encrypted student transcripts across international university nodes. Which approach excites you most?",
     options: [
       {
-        id: "puzzle_opt1",
-        label: "Build a sleek resumable web portal with chunked uploads and progress states",
-        description: "Focus on frictionless user experience, real-time status sockets, and zero user confusion.",
+        id: "puzzle_web",
+        label: "Build an accessible, resumable web portal with chunked multi-part uploads",
+        description: "Focus on zero user confusion, resumable network uploads, and crisp progress indicators.",
         alignedDomains: ["Full-Stack Web Development"],
-        trait: "Product Flow"
+        trait: "Product Experience"
       },
       {
-        id: "puzzle_opt2",
-        label: "Train a compression & deduplication algorithm using semantic similarity",
-        description: "Reduce payload size by 80% by analyzing structured token frequencies.",
-        alignedDomains: ["AI & Machine Learning", "Data Science & Analytics"],
-        trait: "Algorithm Design"
+        id: "puzzle_ai_rag",
+        label: "Deploy semantic embedding search to index and query structured transcript records",
+        description: "Transform raw document transcripts into vector embeddings for instant semantic lookup and validation.",
+        alignedDomains: ["AI Engineering & LLMOps", "AI & Machine Learning"],
+        trait: "Semantic Retrieval & Vector Math"
       },
       {
-        id: "puzzle_opt3",
-        label: "Implement end-to-end zero-knowledge encryption and cryptographic verification",
-        description: "Ensure complete tamper-resistance, confidentiality, and immutable audit logs.",
+        id: "puzzle_crypto",
+        label: "Implement Zero-Knowledge Proofs & End-to-End Cryptographic Signatures",
+        description: "Ensure complete tamper-resistance, confidentiality, and decentralized immutable verification.",
         alignedDomains: ["Cybersecurity & Ethical Hacking"],
-        trait: "Cryptographic Security"
+        trait: "Cryptographic Integrity"
       },
       {
-        id: "puzzle_opt4",
-        label: "Orchestrate an event-driven stream using Kafka message queues and object storage sync",
-        description: "Guarantee at-least-once delivery, fault-tolerant worker pools, and automated retry backoff.",
-        alignedDomains: ["Cloud & DevOps Engineering", "Backend & Distributed Systems"],
-        trait: "Distributed Architecture"
+        id: "puzzle_streaming",
+        label: "Orchestrate an event-driven Apache Kafka / Spark streaming data pipeline",
+        description: "Guarantee at-least-once delivery, fault-tolerant worker clusters, and zero data loss.",
+        alignedDomains: ["Data Engineering & Big Data", "Cloud Computing & DevOps"],
+        trait: "Distributed Stream Processing"
       }
     ]
   },
@@ -130,31 +130,67 @@ export const APTITUDE_QUESTIONS: AptitudeQuestion[] = [
     options: [
       {
         id: "rush_visual",
-        label: "Seeing a living, breathing product that people can click, navigate, and love",
+        label: "Seeing a living, breathing product that people can touch, navigate, and love",
         description: "The satisfaction of clean UI, responsive design, and intuitive user workflows.",
-        alignedDomains: ["Full-Stack Web Development", "UI/UX & Frontend Engineering"],
+        alignedDomains: ["Full-Stack Web Development", "UI/UX & Product Design", "Mobile & Cross-Platform Development"],
         trait: "Visual Impact"
       },
       {
-        id: "rush_insight",
-        label: "Discovering a hidden truth or achieving high prediction accuracy from complex data",
-        description: "The thrill of seeing a model generalize well and uncover insights humans missed.",
-        alignedDomains: ["AI & Machine Learning", "Data Science & Analytics"],
-        trait: "Discovery & Accuracy"
-      },
-      {
-        id: "rush_defense",
-        label: "Finding a hidden vulnerability before anyone else and locking down the perimeter",
-        description: "The excitement of outsmarting attackers and protecting sensitive human data.",
-        alignedDomains: ["Cybersecurity & Ethical Hacking"],
-        trait: "Protection & Mastery"
+        id: "rush_ai_agent",
+        label: "Watching an AI model solve complex reasoning tasks accurately without hallucination",
+        description: "The thrill of seeing prompt chains, RAG pipelines, and agents deliver smart, context-rich results.",
+        alignedDomains: ["AI Engineering & LLMOps", "AI & Machine Learning"],
+        trait: "Intelligent Synthesis"
       },
       {
         id: "rush_automation",
-        label: "Having an entire deployment pipeline run automatically with 0 manual errors",
-        description: "The elegance of robust automation, 99.99% uptime, and scalable architecture.",
-        alignedDomains: ["Cloud & DevOps Engineering"],
-        trait: "Efficiency & Scale"
+        label: "Having an entire multi-cloud deployment pipeline execute in seconds with 99.99% uptime",
+        description: "The elegance of robust automation, declarative infrastructure, and resilient systems.",
+        alignedDomains: ["Cloud Computing & DevOps"],
+        trait: "Scalability & Automation"
+      },
+      {
+        id: "rush_defense",
+        label: "Finding a critical zero-day exploit and patching it before attackers can breach the system",
+        description: "The excitement of outsmarting adversaries and safeguarding sensitive human privacy.",
+        alignedDomains: ["Cybersecurity & Ethical Hacking"],
+        trait: "Security Mastery"
+      }
+    ]
+  },
+  {
+    id: "q5_engineering_preference",
+    category: "PROJECT_PREFERENCE",
+    title: "The Engineering Layer Preference",
+    prompt: "When designing a new enterprise technology system, which layer would you want to take primary ownership of?",
+    options: [
+      {
+        id: "pref_ai_layer",
+        label: "The Cognitive AI Layer (LLMs, Vector DBs, Prompt Workflows)",
+        description: "Fine-tuning models, building RAG knowledge systems, and orchestrating autonomous tool-calling agents.",
+        alignedDomains: ["AI Engineering & LLMOps"],
+        trait: "Applied AI Architecture"
+      },
+      {
+        id: "pref_infra_layer",
+        label: "The Cloud Infrastructure Layer (Kubernetes, Terraform, CI/CD)",
+        description: "Designing the secure VPC networks, autoscaling container clusters, and observability dashboards.",
+        alignedDomains: ["Cloud Computing & DevOps"],
+        trait: "Cloud Infrastructure"
+      },
+      {
+        id: "pref_data_layer",
+        label: "The Big Data & Pipeline Layer (Spark, Kafka, Data Lakes)",
+        description: "Transforming raw data oceans into clean, lightning-fast analytical warehouses and streaming topics.",
+        alignedDomains: ["Data Engineering & Big Data"],
+        trait: "Data Architecture"
+      },
+      {
+        id: "pref_fullstack_layer",
+        label: "The Full-Stack Product Layer (Next.js, React, APIs, PostgreSQL)",
+        description: "Connecting databases, clean APIs, and elegant client interfaces into a cohesive commercial product.",
+        alignedDomains: ["Full-Stack Web Development", "Mobile & Cross-Platform Development"],
+        trait: "End-to-End Product Craft"
       }
     ]
   }
@@ -164,51 +200,81 @@ export const PRESET_DOMAINS = [
   {
     id: "web-dev",
     name: "Full-Stack Web Development",
-    tagline: "Build responsive, scalable, modern applications end-to-end.",
+    tagline: "Build responsive, scalable, modern web applications end-to-end.",
     icon: "Globe",
     primaryColor: "from-blue-500 to-indigo-600",
     popularSkills: ["React", "Next.js", "TypeScript", "Node.js", "PostgreSQL", "Tailwind CSS"],
     careerOpportunities: ["Full-Stack Engineer", "Frontend Specialist", "Backend Developer", "Product Engineer"],
-    marketOutlook: "High demand across startups, mid-market, and enterprise tech."
+    marketOutlook: "High demand across startups, mid-market, and global enterprise tech."
+  },
+  {
+    id: "ai-engineering",
+    name: "AI Engineering & LLMOps",
+    tagline: "Build generative AI systems, autonomous agents, RAG pipelines, and production LLM applications.",
+    icon: "Sparkles",
+    primaryColor: "from-indigo-500 via-purple-500 to-pink-500",
+    popularSkills: ["LangChain", "LlamaIndex", "Vector DBs (Pinecone/Chroma)", "Gemini / OpenAI APIs", "Prompt Engineering", "Python"],
+    careerOpportunities: ["AI Engineer", "Generative AI Developer", "LLMOps Specialist", "AI Solutions Architect"],
+    marketOutlook: "The fastest-growing engineering discipline worldwide with exceptional compensation."
+  },
+  {
+    id: "cloud-devops",
+    name: "Cloud Computing & DevOps",
+    tagline: "Orchestrate resilient cloud infrastructure, CI/CD pipelines, Kubernetes, and scalable systems.",
+    icon: "CloudLightning",
+    primaryColor: "from-cyan-500 to-blue-600",
+    popularSkills: ["Docker", "Kubernetes", "AWS / GCP / Azure", "Terraform", "CI/CD (GitHub Actions)", "Linux"],
+    careerOpportunities: ["Cloud Engineer", "DevOps Specialist", "Site Reliability Engineer (SRE)", "Platform Architect"],
+    marketOutlook: "Mission-critical across every enterprise transitioning to cloud-native stacks."
   },
   {
     id: "ai-ml",
     name: "AI & Machine Learning",
-    tagline: "Harness neural networks, LLMs, and data intelligence to solve complex problems.",
+    tagline: "Harness statistical modeling, deep neural networks, computer vision, and predictive analytics.",
     icon: "BrainCircuit",
     primaryColor: "from-purple-500 to-pink-600",
-    popularSkills: ["Python", "PyTorch", "TensorFlow", "Scikit-Learn", "HuggingFace", "LangChain"],
-    careerOpportunities: ["ML Engineer", "AI Research Scientist", "Applied AI Developer", "Data Scientist"],
-    marketOutlook: "Exponential growth fueled by generative AI and automation."
+    popularSkills: ["Python", "PyTorch", "TensorFlow", "Scikit-Learn", "NumPy & Pandas", "Computer Vision / NLP"],
+    careerOpportunities: ["ML Engineer", "Data Scientist", "Computer Vision Specialist", "AI Research Practitioner"],
+    marketOutlook: "Strong enterprise investment across healthcare, finance, automotive, and technology."
   },
   {
     id: "cybersecurity",
     name: "Cybersecurity & Ethical Hacking",
-    tagline: "Defend critical infrastructure, audit vulnerabilities, and secure data.",
+    tagline: "Defend critical infrastructure, audit vulnerabilities, implement Zero Trust, and secure data.",
     icon: "ShieldCheck",
     primaryColor: "from-emerald-500 to-teal-600",
-    popularSkills: ["Linux", "Network Security", "Wireshark", "Burp Suite", "Cryptography", "Python"],
+    popularSkills: ["Network Security", "Linux", "Burp Suite", "Wireshark", "Cryptography", "AppSec / OWASP"],
     careerOpportunities: ["Security Analyst", "Penetration Tester", "SOC Engineer", "AppSec Specialist"],
-    marketOutlook: "Critical shortage of talent worldwide; consistently high compensation."
+    marketOutlook: "Global talent shortage; highly resilient and recession-proof tech career path."
   },
   {
-    id: "cloud-devops",
-    name: "Cloud & DevOps Engineering",
-    tagline: "Orchestrate resilient cloud architectures, CI/CD pipelines, and scalable systems.",
-    icon: "CloudLightning",
-    primaryColor: "from-cyan-500 to-blue-600",
-    popularSkills: ["Docker", "Kubernetes", "AWS / GCP", "Terraform", "GitHub Actions", "Linux"],
-    careerOpportunities: ["DevOps Engineer", "Site Reliability Engineer (SRE)", "Cloud Architect", "Platform Engineer"],
-    marketOutlook: "High reliance as every enterprise shifts workloads to distributed cloud systems."
+    id: "data-engineering",
+    name: "Data Engineering & Big Data",
+    tagline: "Build high-throughput data pipelines, real-time streaming architectures, and analytical warehouses.",
+    icon: "Database",
+    primaryColor: "from-amber-500 to-orange-600",
+    popularSkills: ["Apache Kafka", "Apache Spark", "SQL & dbt", "Snowflake / BigQuery", "Python", "Airflow"],
+    careerOpportunities: ["Data Engineer", "Analytics Engineer", "Big Data Architect", "Pipeline Specialist"],
+    marketOutlook: "High demand as companies build AI foundations on structured data lakes."
+  },
+  {
+    id: "mobile-dev",
+    name: "Mobile & Cross-Platform Development",
+    tagline: "Craft high-performance native and cross-platform mobile apps for iOS and Android.",
+    icon: "Smartphone",
+    primaryColor: "from-rose-500 to-red-600",
+    popularSkills: ["React Native", "Flutter", "TypeScript", "Swift (iOS)", "Kotlin (Android)", "Mobile UX"],
+    careerOpportunities: ["Mobile Engineer", "React Native Developer", "Flutter Specialist", "iOS/Android Engineer"],
+    marketOutlook: "Consistently strong consumer and B2B app ecosystem."
   },
   {
     id: "ui-ux",
     name: "UI/UX & Product Design",
-    tagline: "Craft delightful user journeys, design systems, and human-centered interfaces.",
+    tagline: "Craft delightful user journeys, design systems, interactive prototypes, and human-centered interfaces.",
     icon: "Palette",
     primaryColor: "from-amber-500 to-rose-600",
     popularSkills: ["Figma", "User Research", "Wireframing", "Design Systems", "Prototyping", "Design Tokens"],
     careerOpportunities: ["Product Designer", "UI/UX Specialist", "Interaction Designer", "Design Systems Lead"],
-    marketOutlook: "Essential for product-market fit and customer retention."
+    marketOutlook: "Essential for product-market fit, user adoption, and customer retention."
   }
 ];
