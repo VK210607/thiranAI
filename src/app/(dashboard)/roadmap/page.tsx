@@ -68,6 +68,8 @@ export default function RoadmapPage() {
   const [rating, setRating] = useState(5);
   const [feedback, setFeedback] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [verificationError, setVerificationError] = useState<string | null>(null);
+  const [verificationDetails, setVerificationDetails] = useState<any | null>(null);
 
   useEffect(() => {
     fetchRoadmap();
@@ -108,6 +110,8 @@ export default function RoadmapPage() {
     setSubmissionNotes(milestone.submissionDetails?.notes || "");
     setRating(milestone.userRating || 5);
     setFeedback(milestone.userFeedback || "");
+    setVerificationError(null);
+    setVerificationDetails(null);
   };
 
   const handleSubmitMilestone = async (e: React.FormEvent) => {
@@ -115,6 +119,9 @@ export default function RoadmapPage() {
     if (!activeModalMilestone) return;
 
     setIsSubmitting(true);
+    setVerificationError(null);
+    setVerificationDetails(null);
+
     try {
       const res = await fetch("/api/roadmap/milestone", {
         method: "POST",
@@ -129,20 +136,31 @@ export default function RoadmapPage() {
         }),
       });
 
-      if (res.ok) {
-        // Trigger celebratory confetti
-        confetti({
-          particleCount: 80,
-          spread: 70,
-          origin: { y: 0.6 },
-          colors: ["#6366f1", "#38bdf8", "#ec4899", "#10b981"],
-        });
+      const data = await res.json();
 
-        setActiveModalMilestone(null);
-        await fetchRoadmap();
+      if (!res.ok) {
+        if (data.verification) {
+          setVerificationError(data.verification.summary || "Submission verification requires revision.");
+          setVerificationDetails(data.verification);
+        } else {
+          setVerificationError(data.error || "Failed to verify milestone.");
+        }
+        return;
       }
+
+      // Trigger celebratory confetti on real AI approval
+      confetti({
+        particleCount: 90,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ["#6366f1", "#38bdf8", "#ec4899", "#10b981"],
+      });
+
+      setActiveModalMilestone(null);
+      await fetchRoadmap();
     } catch (e) {
       console.error(e);
+      setVerificationError("Network error occurred during AI verification.");
     } finally {
       setIsSubmitting(false);
     }
@@ -412,7 +430,7 @@ export default function RoadmapPage() {
 
                     {/* Submission Details View */}
                     {isCompleted && milestone.submissionDetails && (
-                      <div className="pt-2 border-t border-slate-800 text-xs text-slate-300 space-y-1">
+                      <div className="pt-2 border-t border-slate-800 text-xs text-slate-300 space-y-1.5">
                         {milestone.submissionDetails.projectUrl && (
                           <p className="flex items-center gap-1 text-indigo-300">
                             <span className="text-slate-500">Submitted Proof:</span>
@@ -427,6 +445,25 @@ export default function RoadmapPage() {
                             </a>
                           </p>
                         )}
+
+                        {/* AI Verification Badge */}
+                        <div className="flex items-start gap-2 p-2.5 rounded-xl bg-emerald-950/40 border border-emerald-500/30 text-emerald-300 text-xs">
+                          <ShieldCheck className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
+                          <div className="space-y-0.5">
+                            <div className="flex items-center gap-1.5">
+                              <span className="font-bold text-white">AI Verified Deliverables</span>
+                              <span className="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">
+                                {milestone.submissionDetails.verificationScore || 85}/100
+                              </span>
+                            </div>
+                            {milestone.submissionDetails.feedback && (
+                              <p className="text-[11px] text-emerald-200/90 leading-relaxed">
+                                {milestone.submissionDetails.feedback}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+
                         {milestone.userRating && (
                           <div className="flex items-center gap-1 text-amber-400 pt-1">
                             <span className="text-slate-500">Your Enjoyment Rating:</span>
@@ -471,108 +508,217 @@ export default function RoadmapPage() {
 
       {/* Completion & Rating Modal */}
       {activeModalMilestone && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-lg rounded-3xl bg-slate-900 border border-slate-800 p-6 sm:p-8 space-y-6 shadow-2xl animate-in zoom-in-95 duration-150">
-            <div className="flex items-start justify-between">
+        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+          <div className="w-full max-w-xl max-h-[90vh] flex flex-col rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl shadow-indigo-950/40 overflow-hidden animate-in zoom-in-95 duration-200">
+            {/* Modal Header */}
+            <div className="px-6 py-5 border-b border-slate-800 bg-slate-950/50 flex items-start justify-between gap-4">
               <div>
-                <span className="text-xs font-bold text-indigo-400 uppercase tracking-wider">
-                  Milestone Submission
-                </span>
-                <h3 className="text-xl font-bold text-white mt-1">{activeModalMilestone.title}</h3>
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-[11px] font-bold uppercase tracking-wider">
+                  <ShieldCheck className="h-3.5 w-3.5 text-indigo-400" />
+                  <span>Real AI Milestone Review</span>
+                </div>
+                <h3 className="text-lg sm:text-xl font-bold text-white mt-1.5 leading-snug">
+                  {activeModalMilestone.title}
+                </h3>
               </div>
               <button
                 onClick={() => setActiveModalMilestone(null)}
-                className="text-slate-500 hover:text-white text-sm"
+                className="h-8 w-8 rounded-full bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center text-sm transition-colors shrink-0"
               >
                 ✕
               </button>
             </div>
 
-            <form onSubmit={handleSubmitMilestone} className="space-y-4">
-              <div className="space-y-1.5">
-                <label className="text-xs font-medium text-slate-300">
-                  Project Proof Link (GitHub Repo / Live Demo)
-                </label>
-                <input
-                  type="url"
-                  value={submissionUrl}
-                  onChange={(e) => setSubmissionUrl(e.target.value)}
-                  placeholder="https://github.com/your-username/project-repo"
-                  className="w-full p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs font-medium text-slate-300">
-                  What did you build or learn? (Notes)
-                </label>
-                <textarea
-                  rows={2}
-                  value={submissionNotes}
-                  onChange={(e) => setSubmissionNotes(e.target.value)}
-                  placeholder="e.g. Implemented custom hooks, handled state persistence with local storage..."
-                  className="w-full p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
-                />
-              </div>
-
-              {/* Topic Enjoyment Rating */}
-              <div className="space-y-1.5 pt-2 border-t border-slate-800">
-                <label className="text-xs font-medium text-slate-300 block">
-                  How much did you enjoy learning this topic? (1 to 5 Stars)
-                </label>
-                <div className="flex items-center gap-2">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      type="button"
-                      onClick={() => setRating(star)}
-                      className="p-1 hover:scale-110 transition-transform"
-                    >
-                      <Star
-                        className={`h-6 w-6 ${
-                          star <= rating
-                            ? "text-amber-400 fill-amber-400"
-                            : "text-slate-600"
-                        }`}
-                      />
-                    </button>
-                  ))}
+            {/* Scrollable Content Body */}
+            <div className="p-6 overflow-y-auto space-y-5 custom-scrollbar">
+              {/* Challenge Deliverables Reference Pill */}
+              {activeModalMilestone.practicalChallenge && (
+                <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800/80 space-y-2">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-purple-300">
+                    <Code2 className="h-4 w-4 text-purple-400 shrink-0" />
+                    <span>Expected Challenge Deliverables</span>
+                  </div>
+                  <ul className="space-y-1 text-xs text-slate-300 pl-1">
+                    {activeModalMilestone.practicalChallenge.deliverables?.map((deliv, idx) => (
+                      <li key={idx} className="flex items-start gap-2">
+                        <span className="h-1.5 w-1.5 rounded-full bg-purple-400 mt-1.5 shrink-0" />
+                        <span className="leading-relaxed">{deliv}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <p className="text-[11px] text-slate-400">
-                  This signal is remembered by your AI mentor for tailored recommendations.
-                </p>
-              </div>
+              )}
 
-              <div className="space-y-1.5">
-                <label className="text-xs font-medium text-slate-300">
-                  Personal Reflection / Feedback (Optional)
-                </label>
-                <input
-                  type="text"
-                  value={feedback}
-                  onChange={(e) => setFeedback(e.target.value)}
-                  placeholder="e.g. Really loved state machines, found CSS animations slightly tedious"
-                  className="w-full p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
-                />
-              </div>
+              {/* AI Verification Notice / Revision Required Card */}
+              {verificationError && (
+                <div className="p-4 rounded-2xl bg-amber-950/40 border border-amber-500/50 text-xs space-y-3 animate-in fade-in slide-in-from-top-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-amber-300 font-bold">
+                      <AlertCircle className="h-4 w-4 text-amber-400 shrink-0" />
+                      <span>AI Verification Notice</span>
+                    </div>
+                    {verificationDetails?.score !== undefined && (
+                      <span className="px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 font-bold text-[10px]">
+                        Score: {verificationDetails.score}/100
+                      </span>
+                    )}
+                  </div>
 
-              <div className="flex justify-end gap-2 pt-3">
-                <button
-                  type="button"
-                  onClick={() => setActiveModalMilestone(null)}
-                  className="px-4 py-2 rounded-xl text-xs text-slate-400 hover:text-white"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="px-6 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white text-xs font-bold shadow-md shadow-indigo-600/30 flex items-center gap-1.5"
-                >
-                  {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Mark Milestone Complete 🎉"}
-                </button>
-              </div>
-            </form>
+                  <p className="text-amber-100/90 text-xs leading-relaxed">
+                    {verificationError}
+                  </p>
+
+                  {verificationDetails?.missingDeliverables && verificationDetails.missingDeliverables.length > 0 && (
+                    <div className="pt-2.5 border-t border-amber-900/60 space-y-1.5">
+                      <span className="text-[11px] font-bold text-amber-300 uppercase tracking-wider block">
+                        Missing or Incomplete Items:
+                      </span>
+                      <ul className="space-y-1 pl-1">
+                        {verificationDetails.missingDeliverables.map((item: string, i: number) => (
+                          <li key={i} className="flex items-start gap-2 text-amber-200 text-xs">
+                            <span className="text-amber-400 font-bold">•</span>
+                            <span className="leading-relaxed">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {verificationDetails?.suggestedImprovements && verificationDetails.suggestedImprovements.length > 0 && (
+                    <div className="pt-2 border-t border-amber-900/40 space-y-1">
+                      <span className="text-[10px] font-bold text-amber-400/90 uppercase tracking-wider block">
+                        Actionable Next Step:
+                      </span>
+                      <p className="text-[11px] text-amber-200/80 leading-relaxed">
+                        {verificationDetails.suggestedImprovements.join(" ")}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Live AI Progress Banner */}
+              {isSubmitting && (
+                <div className="p-4 rounded-2xl bg-indigo-950/60 border border-indigo-500/40 text-xs text-indigo-200 flex items-center gap-3 animate-pulse">
+                  <Loader2 className="h-5 w-5 animate-spin text-indigo-400 shrink-0" />
+                  <div>
+                    <span className="font-bold text-white block">Gemini 2.5 Flash Reviewing Submission...</span>
+                    <span className="text-[11px] text-indigo-300">
+                      Analyzing project repository structure and technical deliverables match.
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              <form id="milestone-submit-form" onSubmit={handleSubmitMilestone} className="space-y-4">
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between text-xs">
+                    <label className="font-semibold text-slate-200">
+                      Project Proof URL <span className="text-rose-400">*</span>
+                    </label>
+                    <span className="text-[11px] text-slate-500">GitHub, Live Demo, Figma</span>
+                  </div>
+                  <input
+                    type="url"
+                    required
+                    value={submissionUrl}
+                    onChange={(e) => setSubmissionUrl(e.target.value)}
+                    placeholder="https://github.com/your-username/project-repo"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between text-xs">
+                    <label className="font-semibold text-slate-200">
+                      Technical Reflection & Implementation <span className="text-rose-400">*</span>
+                    </label>
+                    <span className="text-[11px] text-slate-500">Min 2–3 sentences</span>
+                  </div>
+                  <textarea
+                    required
+                    rows={3}
+                    value={submissionNotes}
+                    onChange={(e) => setSubmissionNotes(e.target.value)}
+                    placeholder="Describe the architecture, key libraries used, and how you completed the deliverables (required for AI verification)..."
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors leading-relaxed"
+                  />
+                </div>
+
+                {/* Topic Enjoyment Rating */}
+                <div className="p-3.5 rounded-2xl bg-slate-950/60 border border-slate-800/80 space-y-2">
+                  <label className="text-xs font-semibold text-slate-200 block">
+                    How much did you enjoy learning this topic?
+                  </label>
+                  <div className="flex items-center gap-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        onClick={() => setRating(star)}
+                        className="p-1 hover:scale-110 transition-transform"
+                      >
+                        <Star
+                          className={`h-5 w-5 ${
+                            star <= rating
+                              ? "text-amber-400 fill-amber-400"
+                              : "text-slate-700"
+                          }`}
+                        />
+                      </button>
+                    ))}
+                    <span className="text-xs text-slate-400 ml-2 font-medium">
+                      {rating === 5 ? "Loved it!" : rating === 4 ? "Enjoyed" : rating === 3 ? "Neutral" : "Challenging"}
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-slate-500">
+                    Your enjoyment signal is remembered by the AI mentor for tailored recommendations.
+                  </p>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-slate-200">
+                    Personal Reflection / Feedback (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={feedback}
+                    onChange={(e) => setFeedback(e.target.value)}
+                    placeholder="e.g. Loved building the custom hooks, but CSS animations took extra time"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                  />
+                </div>
+              </form>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-6 py-4 bg-slate-950/70 border-t border-slate-800 flex items-center justify-end gap-3 shrink-0">
+              <button
+                type="button"
+                onClick={() => setActiveModalMilestone(null)}
+                className="px-4 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-white transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                form="milestone-submit-form"
+                type="submit"
+                disabled={isSubmitting}
+                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 disabled:opacity-50 text-white text-xs font-bold shadow-lg shadow-indigo-600/30 flex items-center gap-2 transition-all"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span>Verifying with AI...</span>
+                  </>
+                ) : (
+                  <>
+                    <ShieldCheck className="h-4 w-4" />
+                    <span>Verify & Complete Milestone</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       )}

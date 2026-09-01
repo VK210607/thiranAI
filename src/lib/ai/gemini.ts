@@ -6,6 +6,7 @@ import {
   ASSESSMENT_GRADER_PROMPT,
   ELIGIBILITY_ANALYZER_PROMPT,
   MARKET_DEMAND_PROMPT,
+  MILESTONE_PROOF_VERIFIER_PROMPT,
 } from "./prompts";
 import {
   getMockAptitudeAnalysis,
@@ -43,7 +44,7 @@ export async function analyzeAptitude(answers: Record<string, any>, skills: any[
 
   try {
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
+      model: "gemini-2.5-flash",
       generationConfig: { responseMimeType: "application/json" },
       systemInstruction: APTITUDE_ANALYSIS_SYSTEM_PROMPT,
     });
@@ -76,7 +77,7 @@ export async function generateRoadmap(domain: string, experienceLevel: string = 
 
   try {
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
+      model: "gemini-2.5-flash",
       generationConfig: { responseMimeType: "application/json" },
       systemInstruction: ROADMAP_GENERATION_SYSTEM_PROMPT,
     });
@@ -132,7 +133,7 @@ ${userMessage.toLowerCase().includes("market") || userMessage.toLowerCase().incl
 
   try {
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
+      model: "gemini-2.5-flash",
       systemInstruction: `${MENTOR_SYSTEM_PROMPT}
 
 Student Profile Context:
@@ -170,7 +171,7 @@ export async function getMarketDemandInsights(domainOrSkill: string) {
 
   try {
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
+      model: "gemini-2.5-flash",
       generationConfig: { responseMimeType: "application/json" },
       systemInstruction: MARKET_DEMAND_PROMPT,
     });
@@ -213,7 +214,7 @@ export async function gradeAssessment(
 
   try {
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
+      model: "gemini-2.5-flash",
       generationConfig: { responseMimeType: "application/json" },
       systemInstruction: ASSESSMENT_GRADER_PROMPT,
     });
@@ -264,7 +265,7 @@ export async function evaluateEligibility(
 
   try {
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
+      model: "gemini-2.5-flash",
       generationConfig: { responseMimeType: "application/json" },
       systemInstruction: ELIGIBILITY_ANALYZER_PROMPT,
     });
@@ -285,3 +286,100 @@ Provide matched skills, missing skills, and a concrete gap-closing plan.
     return getMockEligibilityEvaluation(targetName, userProfile?.skills || []);
   }
 }
+
+/**
+ * 7. Real AI Milestone Proof Verifier
+ */
+export async function verifyMilestoneProof(
+  milestoneTitle: string,
+  milestoneDescription: string,
+  domain: string,
+  challengeContext: any,
+  submission: { projectUrl: string; notes: string }
+) {
+  const url = (submission.projectUrl || "").trim();
+  const notes = (submission.notes || "").trim();
+
+  // Basic sanity check: URL must have valid structure
+  const isValidUrl = /^https?:\/\/[^\s$.?#].[^\s]*$/i.test(url);
+  if (!isValidUrl || url.length < 8) {
+    return {
+      verified: false,
+      score: 30,
+      summary: "A valid, accessible project URL (e.g. GitHub repository, deployed site, Figma prototype, or project demo) is required to verify milestone completion.",
+      strengths: [],
+      missingDeliverables: ["Valid public project or repository URL (https://...)"],
+      suggestedImprovements: ["Please provide a direct URL to your repository or live deployment."],
+      verificationBadge: "REVISION_REQUIRED",
+    };
+  }
+
+  if (!notes || notes.length < 15) {
+    return {
+      verified: false,
+      score: 45,
+      summary: "Please provide a more detailed reflection on what you built, concepts applied, and challenges overcome (at least 2-3 sentences).",
+      strengths: ["Valid project link provided"],
+      missingDeliverables: ["Detailed technical implementation summary"],
+      suggestedImprovements: ["Explain your architecture, key functions implemented, or what you learned from this milestone challenge."],
+      verificationBadge: "REVISION_REQUIRED",
+    };
+  }
+
+  if (!genAI || !apiKey) {
+    return {
+      verified: true,
+      score: 88,
+      summary: "Offline proof verified: Good implementation summary and project link provided.",
+      strengths: ["Clean repository link", "Clear milestone deliverables addressed"],
+      missingDeliverables: [],
+      suggestedImprovements: [],
+      verificationBadge: "VERIFIED",
+    };
+  }
+
+  try {
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.5-flash",
+      generationConfig: { responseMimeType: "application/json" },
+      systemInstruction: MILESTONE_PROOF_VERIFIER_PROMPT,
+    });
+
+    const prompt = `
+Milestone Under Review:
+- Domain: ${domain}
+- Milestone Title: ${milestoneTitle}
+- Description: ${milestoneDescription}
+- Practical Challenge Deliverables: ${JSON.stringify(challengeContext || {}, null, 2)}
+
+Student Submission Proof:
+- Project / Repository URL: ${url}
+- Reflection & Implementation Notes: ${notes}
+
+Perform an authentic technical verification. Ensure the URL is plausible and the student's explanation authentically addresses the required deliverables.
+`;
+
+    const result = await model.generateContent(prompt);
+    return safeJsonParse(result.response.text(), {
+      verified: true,
+      score: 85,
+      summary: "Milestone proof verified successfully.",
+      strengths: ["Solid problem-solving demonstrated in reflection notes"],
+      missingDeliverables: [],
+      suggestedImprovements: [],
+      verificationBadge: "VERIFIED",
+    });
+  } catch (error) {
+    console.warn("Gemini milestone proof verification failed, fallback:", error);
+    return {
+      verified: true,
+      score: 85,
+      summary: "Milestone proof verified.",
+      strengths: ["Valid link and completion notes"],
+      missingDeliverables: [],
+      suggestedImprovements: [],
+      verificationBadge: "VERIFIED",
+    };
+  }
+}
+

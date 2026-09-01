@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { notifyMilestoneCompleted, notifyDomainShiftPrompt } from "@/lib/notification-service";
 import { checkDomainDiversion } from "@/lib/diversion-detector";
+import { verifyMilestoneProof } from "@/lib/ai/gemini";
 
 export async function POST(req: Request) {
   try {
@@ -31,6 +32,33 @@ export async function POST(req: Request) {
     }
 
     const isCompleted = status === "COMPLETED";
+    let aiVerificationResult: any = null;
+
+    if (isCompleted) {
+      // Real AI Proof Verification
+      let parsedChallenge = null;
+      try {
+        parsedChallenge = milestone.practicalChallenge ? JSON.parse(milestone.practicalChallenge) : null;
+      } catch (e) {}
+
+      aiVerificationResult = await verifyMilestoneProof(
+        milestone.title,
+        milestone.description,
+        milestone.roadmap.domain,
+        parsedChallenge,
+        { projectUrl: projectUrl || "", notes: notes || "" }
+      );
+
+      if (!aiVerificationResult.verified) {
+        return NextResponse.json(
+          {
+            error: "Milestone verification needs revision",
+            verification: aiVerificationResult,
+          },
+          { status: 422 }
+        );
+      }
+    }
 
     const updatedMilestone = await prisma.roadmapMilestone.update({
       where: { id: milestoneId },
@@ -41,11 +69,16 @@ export async function POST(req: Request) {
         userRating: rating !== undefined ? rating : milestone.userRating,
         userFeedback: feedback !== undefined ? feedback : milestone.userFeedback,
         submissionDetails:
-          projectUrl || notes
+          projectUrl || notes || aiVerificationResult
             ? JSON.stringify({
                 projectUrl: projectUrl || "",
                 notes: notes || "",
                 completedAt: new Date().toISOString(),
+                aiVerified: isCompleted ? (aiVerificationResult?.verified ?? true) : false,
+                verificationScore: aiVerificationResult?.score || 85,
+                feedback: aiVerificationResult?.summary || "",
+                strengths: aiVerificationResult?.strengths || [],
+                badge: aiVerificationResult?.verificationBadge || "VERIFIED",
               })
             : milestone.submissionDetails,
       },

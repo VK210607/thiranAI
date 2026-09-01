@@ -728,6 +728,12 @@ video {
 .mt-6 {
   margin-top: 1.5rem;
 }
+.ml-2 {
+  margin-left: 0.5rem;
+}
+.mt-1\.5 {
+  margin-top: 0.375rem;
+}
 .line-clamp-1 {
   overflow: hidden;
   display: -webkit-box;
@@ -827,6 +833,9 @@ video {
 .h-px {
   height: 1px;
 }
+.h-1\.5 {
+  height: 0.375rem;
+}
 .max-h-72 {
   max-height: 18rem;
 }
@@ -901,6 +910,9 @@ video {
 }
 .w-full {
   width: 100%;
+}
+.w-1\.5 {
+  width: 0.375rem;
 }
 .max-w-2xl {
   max-width: 42rem;
@@ -988,6 +1000,12 @@ video {
 }
 .cursor-pointer {
   cursor: pointer;
+}
+.list-inside {
+  list-style-position: inside;
+}
+.list-disc {
+  list-style-type: disc;
 }
 .grid-cols-1 {
   grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -1090,6 +1108,11 @@ video {
   --tw-space-y-reverse: 0;
   margin-top: calc(2rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(2rem * var(--tw-space-y-reverse));
+}
+.space-y-5 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(1.25rem * var(--tw-space-y-reverse));
 }
 .self-start {
   align-self: flex-start;
@@ -1242,6 +1265,24 @@ video {
 }
 .border-slate-800\/80 {
   border-color: rgb(30 41 59 / 0.8);
+}
+.border-amber-500\/40 {
+  border-color: rgb(245 158 11 / 0.4);
+}
+.border-amber-900\/60 {
+  border-color: rgb(120 53 15 / 0.6);
+}
+.border-emerald-500\/30 {
+  border-color: rgb(16 185 129 / 0.3);
+}
+.border-amber-500\/50 {
+  border-color: rgb(245 158 11 / 0.5);
+}
+.border-amber-900\/40 {
+  border-color: rgb(120 53 15 / 0.4);
+}
+.border-indigo-500\/20 {
+  border-color: rgb(99 102 241 / 0.2);
 }
 .bg-\[\#090d16\] {
   --tw-bg-opacity: 1;
@@ -1418,6 +1459,37 @@ video {
 }
 .bg-slate-950\/90 {
   background-color: rgb(2 6 23 / 0.9);
+}
+.bg-amber-950\/50 {
+  background-color: rgb(69 26 3 / 0.5);
+}
+.bg-emerald-500\/20 {
+  background-color: rgb(16 185 129 / 0.2);
+}
+.bg-emerald-950\/40 {
+  background-color: rgb(2 44 34 / 0.4);
+}
+.bg-amber-500\/20 {
+  background-color: rgb(245 158 11 / 0.2);
+}
+.bg-amber-950\/40 {
+  background-color: rgb(69 26 3 / 0.4);
+}
+.bg-indigo-500\/10 {
+  background-color: rgb(99 102 241 / 0.1);
+}
+.bg-purple-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(192 132 252 / var(--tw-bg-opacity, 1));
+}
+.bg-slate-800\/80 {
+  background-color: rgb(30 41 59 / 0.8);
+}
+.bg-slate-950\/50 {
+  background-color: rgb(2 6 23 / 0.5);
+}
+.bg-slate-950\/70 {
+  background-color: rgb(2 6 23 / 0.7);
 }
 .bg-gradient-to-b {
   background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
@@ -1681,6 +1753,10 @@ video {
   padding-top: 2rem;
   padding-bottom: 2rem;
 }
+.py-5 {
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
 .pb-12 {
   padding-bottom: 3rem;
 }
@@ -1728,6 +1804,12 @@ video {
 }
 .pt-6 {
   padding-top: 1.5rem;
+}
+.pl-1 {
+  padding-left: 0.25rem;
+}
+.pt-2\.5 {
+  padding-top: 0.625rem;
 }
 .text-left {
   text-align: left;
@@ -1808,6 +1890,9 @@ video {
 }
 .leading-tight {
   line-height: 1.25;
+}
+.leading-snug {
+  line-height: 1.375;
 }
 .tracking-tight {
   letter-spacing: -0.025em;
@@ -1908,6 +1993,37 @@ video {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
 }
+.text-amber-200 {
+  --tw-text-opacity: 1;
+  color: rgb(253 230 138 / var(--tw-text-opacity, 1));
+}
+.text-amber-200\/90 {
+  color: rgb(253 230 138 / 0.9);
+}
+.text-amber-300 {
+  --tw-text-opacity: 1;
+  color: rgb(252 211 77 / var(--tw-text-opacity, 1));
+}
+.text-emerald-200\/90 {
+  color: rgb(167 243 208 / 0.9);
+}
+.text-amber-100\/90 {
+  color: rgb(254 243 199 / 0.9);
+}
+.text-amber-200\/80 {
+  color: rgb(253 230 138 / 0.8);
+}
+.text-amber-400\/90 {
+  color: rgb(251 191 36 / 0.9);
+}
+.text-purple-300 {
+  --tw-text-opacity: 1;
+  color: rgb(216 180 254 / var(--tw-text-opacity, 1));
+}
+.text-slate-700 {
+  --tw-text-opacity: 1;
+  color: rgb(51 65 85 / var(--tw-text-opacity, 1));
+}
 .underline {
   text-decoration-line: underline;
 }
@@ -1982,6 +2098,10 @@ video {
 }
 .shadow-indigo-600\/30 {
   --tw-shadow-color: rgb(79 70 229 / 0.3);
+  --tw-shadow: var(--tw-shadow-colored);
+}
+.shadow-indigo-950\/40 {
+  --tw-shadow-color: rgb(30 27 75 / 0.4);
   --tw-shadow: var(--tw-shadow-colored);
 }
 .ring-1 {
@@ -2478,6 +2598,11 @@ body {
   .sm\:text-sm {
     font-size: 0.875rem;
     line-height: 1.25rem;
+  }
+
+  .sm\:text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
   }
 
   .sm\:leading-none {
